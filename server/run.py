@@ -14,7 +14,12 @@ class Player:
         self.map = [[0 for i in range(10)] for i in range(10)]
 
     def step(self, enemy):
-        pass
+        data = self.connection.recv(256).decode('utf-8')
+        print(data)
+        enemy.get_conn().send(data.encode('utf-8'))
+
+    def get_conn(self):
+        return self.connection
 
 
 class GameModel:
@@ -39,6 +44,7 @@ class Server(Thread):
         self.connections = connections
 
     def run(self):
+        print('lol')
         while True:
             self.game_model.step()
 
@@ -48,4 +54,4 @@ while True:
     print('connection1')
     second_conn = tcp_socket.accept()
     print('connection2')
-    Server(GameModel(Player(first_conn), Player(second_conn)))
+    Server(GameModel(Player(first_conn[0]), Player(second_conn[0]))).start()
