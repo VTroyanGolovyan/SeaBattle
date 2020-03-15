@@ -1,5 +1,6 @@
 from threading import Thread
 from socket import *
+from random import randint
 
 tcp_socket = socket(AF_INET, SOCK_STREAM)
 tcp_socket.bind((gethostbyname('localhost'), 47777))
@@ -16,7 +17,25 @@ class Player:
     def step(self, enemy):
         data = self.connection.recv(256).decode('utf-8')
         print(data)
-        enemy.get_conn().send(data.encode('utf-8'))
+        data_list = data.split(' ', 1)
+        coords = data_list[1].split(' ', 1)
+        if enemy.shot(int(coords[0]), int(coords[1])):
+            enemy.get_conn().send('myhit '.encode('utf-8') + data_list[1].encode('utf-8'))
+            self.connection.send('hit '.encode('utf-8') + data_list[1].encode('utf-8'))
+        else:
+            self.connection.send('past '.encode('utf-8') + data_list[1].encode('utf-8'))
+            enemy.get_conn().send(data.encode('utf-8'))
+
+    def generate_ships(self):
+        for i in range(25):
+            self.map[randint(0, 9)][randint(0, 9)] = 1
+
+    def shot(self, x, y):
+        if self.map[x][y] == 1:
+            self.map[x][y] = 2
+            return True
+        else:
+            return False
 
     def get_conn(self):
         return self.connection
@@ -26,6 +45,8 @@ class GameModel:
     def __init__(self, first_player, second_player):
         self.first_player = first_player
         self.second_player = second_player
+        first_player.generate_ships()
+        second_player.generate_ships()
         self.turn = 0
 
     def step(self):
@@ -44,7 +65,6 @@ class Server(Thread):
         self.connections = connections
 
     def run(self):
-        print('lol')
         while True:
             self.game_model.step()
 
