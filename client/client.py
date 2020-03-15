@@ -3,9 +3,10 @@ from threading import Thread
 from socket import *
 
 sock = socket(AF_INET, SOCK_STREAM)
-sock.connect(('localhost', 47777))
+sock.connect(('localhost', 47778))
 
 root = Tk()
+root.title('SeaBattle By vhdev')
 
 buttons1 = []
 buttons2 = []
@@ -30,7 +31,7 @@ def MakeMap(container, size, buttons, clickable=False):
     for i in range(size):
         row = []
         for j in range(size):
-            btn = Button(container, text='', bg='white', fg='white',  height=3, width=3)
+            btn = Button(container, text='', bg='white', fg='white',  height=2, width=2)
             btn.grid(row=i, column=j)
             if clickable:
                 btn.bind('<Button-1>', MakeCallback(i, j, buttons))
@@ -75,6 +76,9 @@ class ServerListener(Thread):
                 self.my_map_buttons[int(coords[0])][int(coords[1])].configure(bg='red', fg='#8dff36')
                 root.update()
                 turn = 1
+            elif data[0] == 'gameover':
+                turn = 0
+                print(data[1])
 
 
 ServerListener(sock, buttons1, buttons2).start()

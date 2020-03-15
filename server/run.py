@@ -3,7 +3,7 @@ from socket import *
 from random import randint
 
 tcp_socket = socket(AF_INET, SOCK_STREAM)
-tcp_socket.bind((gethostbyname('localhost'), 47777))
+tcp_socket.bind((gethostbyname('localhost'), 47778))
 tcp_socket.listen(1000)
 
 connections = set()
@@ -13,7 +13,7 @@ class Player:
     def __init__(self, connection):
         self.connection = connection
         self.map = [[0 for i in range(10)] for i in range(10)]
-
+        self.ships_count = 0
     def step(self, enemy):
         data = self.connection.recv(256).decode('utf-8')
         print(data)
@@ -22,6 +22,9 @@ class Player:
         if enemy.shot(int(coords[0]), int(coords[1])):
             enemy.get_conn().send('myhit '.encode('utf-8') + data_list[1].encode('utf-8'))
             self.connection.send('hit '.encode('utf-8') + data_list[1].encode('utf-8'))
+            if enemy.is_all_die():
+                enemy.get_conn().send('gameover '.encode('utf-8') + 'lose'.encode('utf-8'))
+                self.connection.send('gameover '.encode('utf-8') + 'win'.encode('utf-8'))
         else:
             self.connection.send('past '.encode('utf-8') + data_list[1].encode('utf-8'))
             enemy.get_conn().send(data.encode('utf-8'))
@@ -29,6 +32,19 @@ class Player:
     def generate_ships(self):
         for i in range(25):
             self.map[randint(0, 9)][randint(0, 9)] = 1
+        self.ships_count = 0;
+        for i in range(10):
+            for j in range(10):
+                if self.map[i][j] == 1:
+                    self.ships_count += 1
+
+    def is_all_die(self):
+        count = 0
+        for i in range(10):
+            for j in range(10):
+                if self.map[i][j] == 2:
+                    count += 1
+        return count == self.ships_count
 
     def shot(self, x, y):
         if self.map[x][y] == 1:
