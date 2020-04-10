@@ -23,7 +23,7 @@ class ResultView(BaseView):
             bg='white',
             fg='black',
             height=2,
-            width=2
+            width=20
         )
         res_btn.bind(
             '<Button-1>',

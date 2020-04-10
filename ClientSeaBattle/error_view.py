@@ -16,7 +16,7 @@ class ErrorView(BaseView):
             bg='white',
             fg='black',
             height=2,
-            width=16
+            width=20
         )
         start_btn.pack(fill='both')
         frame.grid(row=0, column=0)

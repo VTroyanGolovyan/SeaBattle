@@ -3,7 +3,7 @@ from socket import *
 from player import Player
 
 tcp_socket = socket(AF_INET, SOCK_STREAM)
-tcp_socket.bind((gethostbyname('localhost'), 47775))
+tcp_socket.bind(('127.0.0.1', 47775))
 tcp_socket.listen(1000)
 
 connections = set()
@@ -16,10 +16,10 @@ class Server(Thread):
 
     def run(self):
         while True:
-            # try:
-              self.player.process_msg()
-            # except Exception:
-            #    break
+            try:
+                self.player.process_msg()
+            except Exception:
+                break
 
 
 waitList = []

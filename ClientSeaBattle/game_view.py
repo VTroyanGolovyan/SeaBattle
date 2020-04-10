@@ -56,7 +56,12 @@ class GameView(BaseView):
 
     def draw(self, root):
         playerFrame = Frame(root, bg='green', bd=2)
-        enemyFrame = Frame(root, bg='green', bd=2, cursor='plus')
+        enemyFrame = Frame(
+            root,
+            bg='green',
+            bd=2,
+            cursor='plus'
+        )
         MakeMap(playerFrame, self.playerButtons, self.userSocket, self.fontStyle, False)
         MakeMap(enemyFrame, self.enemyButtons, self.userSocket, self.fontStyle, True)
 

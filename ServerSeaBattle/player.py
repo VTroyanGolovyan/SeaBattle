@@ -42,11 +42,13 @@ class Player:
                 getNotDestroyed(self.enemy.map, int(coords[0]), int(coords[1]), acc)
                 self.pushArray(acc, 'beside')
                 self.enemy.pushArray(acc, 'enemy_beside')
+                for el in acc:
+                    self.enemy.map[el[0]][el[1]] = 3
                 if self.enemy.isAllDie():
                     print('endgame')
                     self.send('win')
                     self.enemy.send('lose')
-            if result != 2:
+            if result == 0 and result != 2:
                 self.setTurn(1)
                 self.enemy.setTurn(0)
 
@@ -55,6 +57,8 @@ class Player:
 
         elif data_list[0] == 'msg':
             self.send('msg you: ' + data_list[1])
+            if self.enemy == '':
+                return
             self.enemy.send(('msg enemy: ' + data_list[1]))
 
     def checkWaitList(self):
