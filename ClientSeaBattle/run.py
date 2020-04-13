@@ -11,7 +11,7 @@ root.rowconfigure(1, weight=1)
 
 try:
     sock = socket(AF_INET, SOCK_STREAM)
-    sock.connect(('127.0.0.1', 47775))
+    sock.connect(('127.0.0.1', 47776))
     viewController = ViewFactory(root, sock)
     viewController.changeView('Menu')
     # run server listener

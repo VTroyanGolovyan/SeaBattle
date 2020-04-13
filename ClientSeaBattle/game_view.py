@@ -14,7 +14,7 @@ def MakeCallback(i, j, buttons, socket):
 def MakeChatCallback(entry, socket):
     def Callback(event):
         check = entry.get().replace('#', '')
-        check = entry.get().replace(' ', '')
+        check = check.replace(' ', '')
         if check == '':
             return
         request = 'msg ' + entry.get().replace('#', '')
@@ -44,6 +44,11 @@ def MakeMap(container, buttons, socket, font, clickable=False):
         buttons.append(row)
 
 
+def get_coords(data):
+    coords = data.split(' ')
+    return int(coords[0]), int(coords[1])
+
+
 class GameView(BaseView):
 
     def __init__(self, userSocket, controller):
@@ -62,8 +67,21 @@ class GameView(BaseView):
             bd=2,
             cursor='plus'
         )
-        MakeMap(playerFrame, self.playerButtons, self.userSocket, self.fontStyle, False)
-        MakeMap(enemyFrame, self.enemyButtons, self.userSocket, self.fontStyle, True)
+
+        MakeMap(
+            playerFrame,
+            self.playerButtons,
+            self.userSocket,
+            self.fontStyle,
+            False
+        )
+        MakeMap(
+            enemyFrame,
+            self.enemyButtons,
+            self.userSocket,
+            self.fontStyle,
+            True
+        )
 
         chatFrame = Frame(root, bg='white', bd=2)
         self.infoLabel = Label(chatFrame, bg='grey', fg='black', text='GameInfo')
@@ -121,28 +139,20 @@ class GameView(BaseView):
             self.chatList.insert(END, data[1])
             self.chatList.yview(END)
         elif data[0] == 'beside':
-            coords = data[1].split(' ')
-            x = int(coords[0])
-            y = int(coords[1])
+            x, y = get_coords(data[1])
             self.enemyButtons[x][y].configure(bg='grey', fg='grey', cursor="plus")
         elif data[0] == 'enemy_beside':
-            coords = data[1].split(' ')
-            x = int(coords[0])
-            y = int(coords[1])
+            x, y = get_coords(data[1])
             self.playerButtons[x][y].configure(bg='grey', fg='grey')
         elif data[0] == 'hit':
-            coords = data[1].split(' ')
-            x = int(coords[0])
-            y = int(coords[1])
+            x, y = get_coords(data[1])
             self.enemyButtons[x][y].configure(
                 bg='green',
                 fg='white',
                 text='#'
             )
         elif data[0] == 'enemy_hit':
-            coords = data[1].split(' ')
-            x = int(coords[0])
-            y = int(coords[1])
+            x, y = get_coords(data[1])
             self.playerButtons[x][y].configure(bg='red', fg='white')
         elif data[0] == 'win':
             self.controller.changeView('Result', text='You win')
@@ -154,9 +164,7 @@ class GameView(BaseView):
             else:
                 self.infoLabel.configure(text='Enemy turn', bg='red')
         elif data[0] == 'set_ship':
-            coords = data[1].split(' ')
-            x = int(coords[0])
-            y = int(coords[1])
+            x, y = get_coords(data[1])
             self.playerButtons[x][y].configure(
                 bg='yellow',
                 fg='red',
