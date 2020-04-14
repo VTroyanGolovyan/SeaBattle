@@ -39,7 +39,12 @@ class Player:
                 self.send('hit ' + data_list[1])
                 self.enemy.send('enemy_hit ' + data_list[1])
                 acc = []
-                getNotDestroyed(self.enemy.map, int(coords[0]), int(coords[1]), acc)
+                getNotDestroyed(
+                    self.enemy.map,
+                    int(coords[0]),
+                    int(coords[1]),
+                    acc
+                )
                 self.pushArray(acc, 'beside')
                 self.enemy.pushArray(acc, 'enemy_beside')
                 for el in acc:
