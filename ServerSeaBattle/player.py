@@ -66,10 +66,10 @@ class Player:
             self.waitList.append(WaitObject(self))
         else:
             self.enemy = self.waitList[0].player
+            del self.waitList[0]
             self.enemy.setEnemy(self)
             self.generate_ships()
             self.enemy.generate_ships()
-            del self.waitList[0]
             time.sleep(0.2)
             self.setTurn(1)
             self.enemy.setTurn(0)
@@ -80,6 +80,9 @@ class Player:
         self.turn = 0
 
     def generate_ships(self):
+        for i in range(10):
+            for j in range(10):
+                self.map[i][j] = 0
         shipsGenerator(self.map)
         self.ships_count = 0
         for i in range(10):
