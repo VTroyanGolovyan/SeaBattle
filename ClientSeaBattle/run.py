@@ -1,5 +1,5 @@
 from tkinter import Tk
-from socket import *
+import socket
 
 from server_listener import ServerListener
 from view_factory import ViewFactory
@@ -10,7 +10,7 @@ root.resizable(width=False, height=False)
 root.rowconfigure(1, weight=1)
 
 try:
-    sock = socket(AF_INET, SOCK_STREAM)
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect(('127.0.0.1', 47775))
     viewController = ViewFactory(root, sock)
     viewController.changeView('Menu')

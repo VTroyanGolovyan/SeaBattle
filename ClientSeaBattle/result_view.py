@@ -1,11 +1,10 @@
-from tkinter import *
+from tkinter import Frame, Button
 from BaseView import BaseView
 
 
 def make_click_callback(socket, controller):
     def click(event):
-        socket.send('new_game'.encode('utf-8'))
-        controller.changeView('GameView')
+        controller.changeView('Menu')
     return click
 
 

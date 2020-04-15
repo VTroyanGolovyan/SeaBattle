@@ -1,4 +1,5 @@
-from tkinter import *
+from tkinter import Frame, Button, Label
+from tkinter import BOTH, X
 from BaseView import BaseView
 
 

@@ -1,12 +1,11 @@
 from threading import Thread
-from socket import *
+import socket
 from player import Player
 
-tcp_socket = socket(AF_INET, SOCK_STREAM)
+socket.allow_reuse_address = True
+tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 tcp_socket.bind(('127.0.0.1', 47775))
 tcp_socket.listen(1000)
-
-connections = set()
 
 
 class Server(Thread):

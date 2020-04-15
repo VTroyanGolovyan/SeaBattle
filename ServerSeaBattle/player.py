@@ -39,7 +39,12 @@ class Player:
                 self.send('hit ' + data_list[1])
                 self.enemy.send('enemy_hit ' + data_list[1])
                 acc = []
-                getNotDestroyed(self.enemy.map, int(coords[0]), int(coords[1]), acc)
+                getNotDestroyed(
+                    self.enemy.map,
+                    int(coords[0]),
+                    int(coords[1]),
+                    acc
+                )
                 self.pushArray(acc, 'beside')
                 self.enemy.pushArray(acc, 'enemy_beside')
                 for el in acc:
@@ -66,10 +71,10 @@ class Player:
             self.waitList.append(WaitObject(self))
         else:
             self.enemy = self.waitList[0].player
+            del self.waitList[0]
             self.enemy.setEnemy(self)
             self.generate_ships()
             self.enemy.generate_ships()
-            del self.waitList[0]
             time.sleep(0.2)
             self.setTurn(1)
             self.enemy.setTurn(0)
@@ -80,6 +85,9 @@ class Player:
         self.turn = 0
 
     def generate_ships(self):
+        for i in range(10):
+            for j in range(10):
+                self.map[i][j] = 0
         shipsGenerator(self.map)
         self.ships_count = 0
         for i in range(10):

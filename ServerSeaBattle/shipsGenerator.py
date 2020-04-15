@@ -2,13 +2,7 @@ from random import randint
 
 
 def check(array, x, y):
-    if x >= 10:
-        return False
-    if y >= 10:
-        return False
-    if x < 0:
-        return False
-    if y < 0:
+    if x >= 10 or y >= 10 or x < 0 or y < 0:
         return False
     return array[x][y] != 0
 
@@ -16,15 +10,9 @@ def check(array, x, y):
 def checkLineShip(array, x, start, size):
     for i in range(size):
         res = array[x][start + i] != 0
-        res = res or check(array, x, start + i)
-        res = res or check(array, x, start + i + 1)
-        res = res or check(array, x, start + i - 1)
-        res = res or check(array, x + 1, start + i)
-        res = res or check(array, x - 1, start + i)
-        res = res or check(array, x - 1, start + i - 1)
-        res = res or check(array, x - 1, start + i + 1)
-        res = res or check(array, x + 1, start + i - 1)
-        res = res or check(array, x + 1, start + i + 1)
+        for z in range(-1, 2):
+            for j in range(-1, 2):
+                res = res or check(array, x + z, start + i + j)
         if res:
             return False
     return True
@@ -33,15 +21,9 @@ def checkLineShip(array, x, start, size):
 def checkColumnShip(array, start, y, size):
     for i in range(size):
         res = array[start + i][y] != 0
-        res = res or check(array, start + i, y)
-        res = res or check(array, start + i + 1, y)
-        res = res or check(array, start + i - 1, y)
-        res = res or check(array, start + i, y + 1)
-        res = res or check(array, start + i, y - 1)
-        res = res or check(array, start + i - 1, y - 1)
-        res = res or check(array, start + i + 1, y - 1)
-        res = res or check(array, start + i - 1, y + 1)
-        res = res or check(array, start + i + 1, y + 1)
+        for z in range(-1, 2):
+            for j in range(-1, 2):
+                res = res or check(array, start + i + z, y + j)
         if res:
             return False
     return True
