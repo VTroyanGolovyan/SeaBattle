@@ -1,2 +1,2 @@
-# SeaBattle
+# SeaBattle online
 SeaBattle online
